@@ -5,7 +5,6 @@
     #include <stdarg.h>
     #include <string.h>
 
-
     /* I/O Files */
     extern FILE *yyin;
     extern FILE *yyout;
@@ -29,32 +28,35 @@
 
     /* decimal zero */
 0                           {
-
                             }
 
     /* Integer is a of digits not empty */
 [1-9][0-9]*                 {
+                                emitCode("000");
                                 emitCode(yytext);
+                                emitCode(" ");
                             }
 
     /* Operators */
 [-+]                        {
-                                if(yytext == "-") {
+                                int value=strcmp(yytext, "-");
+                                if(value==0){
                                     emitCode("00");
-                                }
-                                if(yytext == "+") {
+                                }            
+                                else{
                                     emitCode("01");
                                 }
+                                emitCode(" ");
                             }
 
     /* Interruption */
 [h]                         {
-                                emitCode("02");
+                                emitCode("11");
+                                emitCode(" ");
                             }
 
     /* Symbols */
 [:,]                        {
-
                             }
 
     /* Commentaries begin with doble semicolon */
