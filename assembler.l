@@ -24,6 +24,7 @@
     /* Counts the line number */
 \n                          {
                                 lineno++;
+                                emitCode("\n");
                             }
 
     /* decimal zero */
@@ -50,7 +51,7 @@
                             }
 
     /* Interruption */
-[h]                         {
+h                           {
                                 emitCode("11");
                                 emitCode(" ");
                             }
