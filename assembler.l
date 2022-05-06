@@ -9,7 +9,9 @@
     /* I/O Files */
     extern FILE *yyin;
     extern FILE *yyout;
+    FILE *out_endian;
     char *OUTFILE = "out.lst";
+    char *OUTFILE_ENDIAN = "out.endian";
 
     int lineno = 1;             /* line number */
     int contador_hexa = 0;      /* Cuenta 1 por cada 2 digitos desplegados, muestra los números hexadecimales al inicio de cada línea */
@@ -18,6 +20,7 @@
 
     void yyerror(char *);       /* error log */
     void emitCode(char *s);
+    void emitEndian(char *s);
     char* Conversor_string_hexa(char *n); 
     char* Conversor_contador_hexa(int cont);
 %}
@@ -33,7 +36,7 @@
     /* Los comentarios empiezan con punto y coma, por lo tanto cuando se encuentra uno se ignora toda la línea */
 ;.*                         ;
 
-    /* Cuando se encuentra el símbolo de nueva línea, se aumenta el número de línea para los errores y se pasa a la siguiente en el yyout*/
+    /* Cuando se encuentra el símbolo de nueva línea, se aumenta el número de línea para los errores y se pasa a la siguiente en el out*/
 
 \n                          {
                                 lineno++;
@@ -132,7 +135,7 @@ void yyerror(char *s) {
 }
 
 /* 
-Descripción: imprime codigos en el archivo de output (yyout file)
+Descripción: imprime codigos en el archivo de output (out file)
 Recibe: Un string para escribir en el archivo
 */
 
@@ -141,6 +144,13 @@ void emitCode(char *s) {
     sprintf(codestr, s); 
     fflush(stdin);
     fputs(codestr, yyout);
+}
+
+void emitEndian(char *s) {
+    char codestr[CODESIZE];
+    sprintf(codestr, s); 
+    fflush(stdin);
+    fputs(codestr, out_endian);
 }
 
 // Application entry point
@@ -163,6 +173,14 @@ int main(int argumentos, char* argumentosAnexos[]) {
         printf("out file couldn't be opened\n");
         exit(1);
     }
+
+    // Opens output file for endian formatt
+    out_endian = fopen(OUTFILE_ENDIAN, "w+");
+    if(!out_endian) {
+        printf("out endian file couldn't be opened\n");
+        exit(1);
+    }
+
     emitCode("00");
 
     // The function that starts the analysis
@@ -171,6 +189,7 @@ int main(int argumentos, char* argumentosAnexos[]) {
     // Closes the files
     fclose(yyin);
     fclose(yyout);
+    fclose(out_endian);
     
     return 0;
 }
