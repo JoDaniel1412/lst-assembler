@@ -12,7 +12,7 @@
     char *OUTFILE = "out.lst";
 
     int lineno = 1;             /* line number */
-    int contador_hexa = 0;  /* Cuenta 1 por cada 2 digitos desplegados, muestra los números hexadecimales al inicio de cada línea */
+    int contador_hexa = 0;      /* Cuenta 1 por cada 2 digitos desplegados, muestra los números hexadecimales al inicio de cada línea */
 
     static int CODESIZE = 50;   /* lenght of a line of code */
 
@@ -102,7 +102,7 @@
                             }
 
     /* Interruption */
-[h]                         {
+h                           {
                                 contador_hexa+= 3;
                                 emitCode("0000 ");
                                 emitCode("11");
@@ -121,7 +121,7 @@
 
 %%
 
-
+// Default lex function for end of file
 int yywrap(void) {
     return 1;
 }
