@@ -16,8 +16,6 @@
     int lineno = 1;             /* line number */
     int contador_hexa = 0;      /* Cuenta 1 por cada 2 digitos desplegados, muestra los números hexadecimales al inicio de cada línea */
 
-    static int CODESIZE = 50;   /* lenght of a line of code */
-
     void yyerror(char *);       /* error log */
     void emitCode(char *s);
     void emitEndian(char *s);
@@ -119,7 +117,7 @@ h                           {
 
     /* Any other throws error */
 .               {
-                    yyerror("Error lexico: simbolo desconocido");
+                    yyerror(yytext);
                 }
 
 %%
@@ -131,7 +129,7 @@ int yywrap(void) {
 
 // Handles lexical errors
 void yyerror(char *s) {
-	fprintf(stderr, "linea %d: %s\n", lineno, s);
+	fprintf(stderr, "Lexical error at line %d. Encountered: '%s'\n", lineno, s);
 }
 
 /* 
@@ -140,17 +138,11 @@ Recibe: Un string para escribir en el archivo
 */
 
 void emitCode(char *s) {
-    char codestr[CODESIZE];
-    sprintf(codestr, s); 
-    fflush(stdin);
-    fputs(codestr, yyout);
+    fprintf(yyout, "%s", s);
 }
 
 void emitEndian(char *s) {
-    char codestr[CODESIZE];
-    sprintf(codestr, s); 
-    fflush(stdin);
-    fputs(codestr, out_endian);
+    fprintf(out_endian, "%s", s);
 }
 
 // Application entry point
